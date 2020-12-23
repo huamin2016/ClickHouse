@@ -21,6 +21,8 @@
 #include <string>
 #include <Columns/ColumnString.h>
 #include "Functions/greenet/ip/libip.h"
+#include <DataTypes/DataTypeString.h
+
 
 namespace DB
 {
@@ -86,7 +88,7 @@ public:
 
     bool useDefaultImplementationForConstants() const override { return true; }
 
-    void executeImpl(Block & block, const ColumnNumbers & arguments, size_t result, size_t /*input_rows_count*/) const override
+    void executeImpl(Block & block, const ColumnNumbers & arguments, size_t result, size_t input_rows_count) const override
     {
         const ColumnPtr column = block.getByPosition(arguments[0]).column;
         if (const ColumnString * col = checkAndGetColumn<ColumnString>(column.get()))
@@ -100,13 +102,12 @@ public:
     
             std::string res=datablock.region;
 
-            col_res->insertData(res.c_str(),res.length());
-            
             std::cout<<"result:"<<result<<",size:"<<res.size()<<",length:"<<res.length()<<std::endl;
             std::cout<<"gnip input:"<<col->getChars().raw_data()<<",outpu:"<<res.c_str()<<std::endl;
 
-            block.getByPosition(result).column = std::move(col_res);
-            //block.getByPosition(result).column = DataTypeString().createColumnConst(input_rows_count, db_name);
+            //col_res->insertData(res.c_str(),res.length());
+            //block.getByPosition(result).column = std::move(col_res);
+            block.getByPosition(result).column = DataTypeString().createColumnConst(input_rows_count, res);
         }
         else
             throw Exception(
