@@ -4,6 +4,10 @@
 namespace DB
 {
 
+//gn function
+void registerFunctionGnIp(FunctionFactory &);
+
+
 void registerFunctionsArithmetic(FunctionFactory &);
 void registerFunctionsArray(FunctionFactory &);
 void registerFunctionsTuple(FunctionFactory &);
@@ -46,6 +50,9 @@ void registerFunctionBayesAB(FunctionFactory &);
 void registerFunctions()
 {
     auto & factory = FunctionFactory::instance();
+
+    registerFunctionGnIp(factory);
+
 
     registerFunctionsArithmetic(factory);
     registerFunctionsArray(factory);
