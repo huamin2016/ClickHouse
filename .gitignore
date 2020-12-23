@@ -9,6 +9,7 @@
 # auto generated files
 *.logrt
 
+/contrib
 /build
 /build_*
 /build-*
