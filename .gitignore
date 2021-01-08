@@ -8,6 +8,7 @@
 
 # auto generated files
 *.logrt
+build
 /contrib/grpc
 /contrib
 /build

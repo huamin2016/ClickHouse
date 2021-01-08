@@ -55,9 +55,10 @@ class FunctionGnIp : public IFunction
 public:
 
     static constexpr auto name = "gnip";
-    static FunctionPtr create(const Context &)
+    static FunctionPtr create(const Context & con)
     {
-        std::cout<<"gnip: create"<<std::endl;
+        
+        std::cout<<"gnip: create "<<con.getPath()<<std::endl;
 
         return std::make_shared<FunctionGnIp>();
     }

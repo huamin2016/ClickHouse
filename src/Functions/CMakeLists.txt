@@ -58,7 +58,8 @@ endif()
 target_include_directories(clickhouse_functions SYSTEM PRIVATE ${SPARSEHASH_INCLUDE_DIR})
 
 # Won't generate debug info for files with heavy template instantiation to achieve faster linking and lower size.
-target_compile_options(clickhouse_functions PRIVATE "-g0")
+#gn
+target_compile_options(clickhouse_functions PRIVATE "-g0" -Wno-error)
 
 if (USE_ICU)
     target_link_libraries (clickhouse_functions PRIVATE ${ICU_LIBRARIES})
@@ -116,7 +117,7 @@ add_subdirectory(array)
 target_link_libraries(clickhouse_functions PRIVATE clickhouse_functions_array)
 
 #gn
-set(CMAK_CXX_FLAGS "${CMAK_CXX_FLAGS} -Wno-error")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error")
 add_subdirectory(greenet)
 
 if (USE_STATS)

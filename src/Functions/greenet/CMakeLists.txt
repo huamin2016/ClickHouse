@@ -1,1 +1,0 @@
-set(CMAK_CXX_FLAGS "${CMAK_CXX_FLAGS} -Wno-error")

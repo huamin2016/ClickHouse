@@ -63,6 +63,9 @@
 #include <Server/MySQLHandlerFactory.h>
 #include <Server/PostgreSQLHandlerFactory.h>
 
+//gn
+#include "Poco/Logger.h"
+#include "Poco/Path.h"
 
 #if !defined(ARCADIA_BUILD)
 #   include "config_core.h"
@@ -134,6 +137,9 @@ namespace ErrorCodes
 static std::string getCanonicalPath(std::string && path)
 {
     Poco::trimInPlace(path);
+    
+    std::cout<<"#gn server getCanonicalPath "<<path<<std::endl;
+
     if (path.empty())
         throw Exception("path configuration parameter is empty", ErrorCodes::INVALID_CONFIG_PARAMETER);
     if (path.back() != '/')
@@ -163,12 +169,15 @@ static std::string getUserName(uid_t user_id)
 
 void Server::uninitialize()
 {
-    logger().information("shutting down");
+    logger().information("shutting down server");
     BaseDaemon::uninitialize();
 }
 
 int Server::run()
 {
+    //gn
+    std::cout<<"#gn Server::run() config_path:"<<config_path<<std::endl;
+
     if (config().hasOption("help"))
     {
         Poco::Util::HelpFormatter help_formatter(Server::options());
@@ -241,6 +250,7 @@ int Server::main(const std::vector<std::string> & /*args*/)
     UseSSL use_ssl;
 
     ThreadStatus thread_status;
+    std::cout<<"#gn config_path:"<<config_path<<std::endl;
 
     registerFunctions();
     registerAggregateFunctions();
