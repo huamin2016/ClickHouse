@@ -21,7 +21,7 @@
 #include <string>
 #include <Columns/ColumnString.h>
 #include "Functions/greenet/ip/libip.h"
-#include <DataTypes/DataTypeString.h
+#include <DataTypes/DataTypeString.h>
 
 
 namespace DB

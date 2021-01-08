@@ -315,7 +315,7 @@ if (UNBUNDLED OR NOT (OS_LINUX OR OS_DARWIN))
     # Using system libs can cause a lot of warnings in includes (on macro expansion).
     option (WERROR "Enable -Werror compiler option" OFF)
 else ()
-    option (WERROR "Enable -Werror compiler option" ON)
+    option (WERROR "Enable -Werror compiler option" OFF)
 endif ()
 
 if (WERROR)
