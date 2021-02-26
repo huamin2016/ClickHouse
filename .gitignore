@@ -9,6 +9,9 @@
 # auto generated files
 *.logrt
 build
+core.*
+.git
+.git*
 #/contrib/grpc
 #/contrib
 /build
