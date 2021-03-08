@@ -1,0 +1,6 @@
+export CC=gcc-9
+export CXX=g++-9
+cd build
+#cmake -DENABLE_TESTS=OFF -DWERROR=OFF -DCMAKE_BUILD_TYPE=MinSizeRel -fpermissive ../
+cmake -DENABLE_TESTS=OFF -DWERROR=OFF -DCMAKE_BUILD_TYPE=MinSizeRel ../
+

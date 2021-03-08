@@ -70,9 +70,9 @@ if (USE_FASTOPS)
     target_include_directories (clickhouse_functions SYSTEM PRIVATE ${FASTOPS_INCLUDE_DIR})
 endif ()
 
-if (ENABLE_TESTS)
-    add_subdirectory (tests)
-endif ()
+#if (ENABLE_TESTS)
+    #add_subdirectory (tests)
+#endif ()
 
 if (USE_EMBEDDED_COMPILER)
     target_link_libraries(clickhouse_functions PRIVATE ${REQUIRED_LLVM_LIBRARIES})
