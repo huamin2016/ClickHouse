@@ -3,6 +3,13 @@ configure_file(config_functions.h.in ${ConfigIncludePath}/config_functions.h)
 include(${ClickHouse_SOURCE_DIR}/cmake/dbms_glob_sources.cmake)
 add_headers_and_sources(clickhouse_functions .)
 
+#gn
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error")
+add_headers_and_sources(clickhouse_functions ./greenet)
+add_headers_and_sources(clickhouse_functions ./greenet/ip)
+
+add_subdirectory(greenet)
+
 list(REMOVE_ITEM clickhouse_functions_sources IFunctionImpl.cpp FunctionFactory.cpp FunctionHelpers.cpp)
 list(REMOVE_ITEM clickhouse_functions_headers IFunctionImpl.h FunctionFactory.h FunctionHelpers.h)
 
@@ -118,3 +125,5 @@ target_link_libraries(clickhouse_functions PRIVATE clickhouse_functions_array)
 if (USE_STATS)
     target_link_libraries(clickhouse_functions PRIVATE stats)
 endif()
+
+
