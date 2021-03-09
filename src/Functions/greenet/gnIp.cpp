@@ -48,7 +48,7 @@ void initIps(){
     if (ip2region_create(&ip2rEntry, DIC_GNIP) == 0) {
         println("Error: Fail to create the ip2region object\n");
     };
-    std::cout<<"init dic_gnip "<<std::endl;
+    std::cout<<"init dic_gnip: "<<DIC_GNIP<<std::endl;
 }
 
 class FunctionGnIp : public IFunction
@@ -72,7 +72,7 @@ public:
         return 1;
     }
 
-    bool isInjective(const Block &) const override
+    bool isInjective(const Block &) const
     {
         return false;
     }
@@ -88,16 +88,22 @@ public:
 
     bool useDefaultImplementationForConstants() const override { return true; }
 
-    void executeImpl(Block & block, const ColumnNumbers & arguments, size_t result, size_t input_rows_count) const override
+    //ColumnPtr executeImpl(Block & block, const ColumnNumbers & arguments, size_t result, size_t input_rows_counta) const override
+    ColumnPtr executeImpl(const ColumnsWithTypeAndName & arguments, const DataTypePtr &, size_t input_rows_count) const override
     {
-        const ColumnPtr column = block.getByPosition(arguments[0]).column;
+        //const ColumnPtr column = block.getByPosition(arguments[0]).column;
+        const ColumnPtr column =arguments[0].column;
         if (const ColumnString * col = checkAndGetColumn<ColumnString>(column.get()))
         {
 
             auto col_res = ColumnString::create();
+
+            for (int i=0;i<input_rows_count;i++){
+                std::cout<<"i:"<<i<<",offset:"<<col->getOffsets()[i]<<std::endl;
+            }
             vector(col->getChars(), col->getOffsets(), col_res->getChars(), col_res->getOffsets());
-            block.getByPosition(result).column = std::move(col_res);
-    
+            //block.getByPosition(result).column = std::move(col_res);
+            return col_res; 
             //datablock_entry datablock;
             //ip2region_memory_search_string(&ip2rEntry, col->getChars().raw_data(), &datablock);
             //std::string res=datablock.region;
@@ -109,7 +115,7 @@ public:
         }
         else
             throw Exception(
-                "Illegal column " + block.getByPosition(arguments[0]).column->getName() + " of argument of function " + getName(),
+                "Illegal column " + arguments[0].column->getName() + " of argument of function " + getName(),
                 ErrorCodes::ILLEGAL_COLUMN);
     }
 
@@ -118,9 +124,10 @@ using Pos=const char *;
 static void vector(const ColumnString::Chars & data, const ColumnString::Offsets & offsets,
         ColumnString::Chars & res_data, ColumnString::Offsets & res_offsets)
     {
+        std::cout<<"vector: data.size: "<<data.size()<<std::endl;
         size_t size = offsets.size();
         res_offsets.resize(size);
-        res_data.reserve(size * 32);
+        res_data.reserve(data.size());
 
         size_t prev_offset = 0;
         size_t res_offset = 0;
@@ -131,6 +138,8 @@ static void vector(const ColumnString::Chars & data, const ColumnString::Offsets
 
         for (size_t i = 0; i < size; ++i)
         {
+            std::cout<<"prev_offset:"<<prev_offset<<" "<<&data[prev_offset]<<" "<<offsets[i]-prev_offset<<" "<<start<<" "<<length<<std::endl;
+
             execute(reinterpret_cast<const char *>(&data[prev_offset]), offsets[i] - prev_offset - 1, start, length);
 
             res_data.resize(res_data.size() + length + 1);
@@ -145,7 +154,7 @@ static void vector(const ColumnString::Chars & data, const ColumnString::Offsets
 
   static void execute(Pos data, size_t size, Pos & res_data, size_t & res_size)
     {
-        res_data = "";
+        res_data = data;
         res_size = 0;
         
         datablock_entry datablock;

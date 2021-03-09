@@ -56,10 +56,15 @@ void registerFunctionAESDecryptMysql(FunctionFactory & factory);
 
 #endif
 
+//gn
+void registerFunctionGnIp(FunctionFactory & factory);
 
 void registerFunctions()
 {
     auto & factory = FunctionFactory::instance();
+
+    //gn
+    registerFunctionGnIp(factory);
 
     registerFunctionsArithmetic(factory);
     registerFunctionsArray(factory);
