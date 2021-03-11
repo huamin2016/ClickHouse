@@ -48,7 +48,7 @@ void initIps(){
     if (ip2region_create(&ip2rEntry, DIC_GNIP) == 0) {
         println("Error: Fail to create the ip2region object\n");
     };
-    std::cout<<"init dic_gnip: "<<DIC_GNIP<<std::endl;
+    //std::cout<<"init dic_gnip: "<<DIC_GNIP<<std::endl;
 }
 
 class FunctionGnIp : public IFunction
@@ -98,9 +98,6 @@ public:
 
             auto col_res = ColumnString::create();
 
-            for (int i=0;i<input_rows_count;i++){
-                std::cout<<"i:"<<i<<",offset:"<<col->getOffsets()[i]<<std::endl;
-            }
             vector(col->getChars(), col->getOffsets(), col_res->getChars(), col_res->getOffsets());
             //block.getByPosition(result).column = std::move(col_res);
             return col_res; 
@@ -138,7 +135,6 @@ static void vector(const ColumnString::Chars & data, const ColumnString::Offsets
 
         for (size_t i = 0; i < size; ++i)
         {
-            std::cout<<"prev_offset:"<<prev_offset<<" "<<&data[prev_offset]<<" "<<offsets[i]-prev_offset<<" "<<start<<" "<<length<<std::endl;
 
             execute(reinterpret_cast<const char *>(&data[prev_offset]), offsets[i] - prev_offset - 1, start, length);
 
@@ -163,7 +159,6 @@ static void vector(const ColumnString::Chars & data, const ColumnString::Offsets
         res_data=datablock.region;
         res_size=strlen(res_data); 
 
-        std::cout<<"in:"<<data<<",out:"<<res_data<<std::endl;
     }
 
 
